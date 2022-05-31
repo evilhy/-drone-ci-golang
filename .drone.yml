@@ -17,11 +17,11 @@ steps:
   - name: 打包Docker镜像并推送
     image: plugins/docker
     settings:
-      registry: docker.gitee.ltd
-      repo: docker.gitee.ltd/lxh/golang-demo
+      registry: hub.docker.com
+      repo: hub.docker.com/evilhy/golang-demo
       use_cache: true
-      username: docker
-      password: dockeruser
+      username: evilhy
+      password: 060924
       auto_tag: true
     when:
       event: push
