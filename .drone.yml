@@ -1,0 +1,40 @@
+kind: pipeline
+name: default
+steps:
+  - name: 执行代码检查
+    image: golang:latest
+    commands:
+      - go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+      - golangci-lint run
+  - name: 编译二进制文件
+    image: golang:latest
+    environment:
+      GOOS: linux
+      GOARCH: amd64
+      CGO_ENABLED: 0
+    commands:
+      - go build -o go-app
+  - name: 打包Docker镜像并推送
+    image: plugins/docker
+    settings:
+      registry: docker.gitee.ltd
+      repo: docker.gitee.ltd/lxh/golang-demo
+      use_cache: true
+      username: docker
+      password: dockeruser
+      auto_tag: true
+    when:
+      event: push
+      branch: master
+  - name: 发送电报通知消息
+    image: appleboy/drone-telegram
+    settings:
+      token: 883905265:AAFv3NAH4ykdh2m_XiQUuyKNJ9XE5RV7ukU
+      to: 365042238
+      message: >
+        {{#success build.status}}
+          第 {{build.number}} 次构建已完成，状态：构建成功
+        {{else}}
+          第 {{build.number}} 次构建已完成，状态：构建失败
+        {{/success}}
+        提交记录：{{commit.author}} - {{commit.message}}
