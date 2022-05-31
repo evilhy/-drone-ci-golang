@@ -8,7 +8,6 @@ RUN mkdir -p /app && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /et
   apk add --update tzdata && \
   rm -rf /var/cache/apk/*
 WORKDIR /app
-COPY go-app ./
 ENV TZ=Asia/Shanghai
 EXPOSE 8080
-ENTRYPOINT ./go-app
+
