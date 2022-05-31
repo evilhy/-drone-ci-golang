@@ -1,19 +1,6 @@
 kind: pipeline
 name: default
 steps:
-  - name: 执行代码检查
-    image: golang:latest
-    commands:
-      - go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-#      - golangci-lint run
-  - name: 编译二进制文件
-    image: golang:latest
-    environment:
-      GOOS: linux
-      GOARCH: amd64
-      CGO_ENABLED: 0
-    commands:
-      - go build -o go-app
   - name: 打包Docker镜像并推送
     image: plugins/docker
     settings:
